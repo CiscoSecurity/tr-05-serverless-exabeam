@@ -1,4 +1,4 @@
-from marshmallow import ValidationError, Schema, fields, INCLUDE
+from marshmallow import ValidationError, Schema, fields
 
 
 def validate_string(value):
