@@ -196,11 +196,13 @@ def test_call_with_wrong_jwks_host(
 @patch('requests.request')
 @patch('requests.get')
 def test_call_with_ssl_error(mock_get, mock_request,
-                                    mock_exception_for_ssl_error,
-                                    client, valid_jwt,
-                                    ssl_error_expected_relay_response):
+                             mock_exception_for_ssl_error,
+                             client, valid_jwt,
+                             ssl_error_expected_relay_response):
 
-    mock_get.return_value = mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+    mock_get.return_value = mock_api_response(
+        payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    )
     mock_request.side_effect = SSLError(mock_exception_for_ssl_error)
 
     response = client.post('/health',
@@ -216,7 +218,9 @@ def test_call_with_connection_error(
         client, valid_jwt,
         connection_error_expected_relay_response):
 
-    mock_get.return_value = mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+    mock_get.return_value = mock_api_response(
+        payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    )
     for error in (ConnectionError, MissingSchema):
         mock_request.side_effect = error()
 

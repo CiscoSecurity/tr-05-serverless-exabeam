@@ -20,7 +20,9 @@ def route(request):
 @patch('requests.request')
 @patch('requests.get')
 def test_health_call_success(mock_get, mock_request, route, client, valid_jwt):
-    mock_get.return_value = mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+    mock_get.return_value = mock_api_response(
+        payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    )
     mock_request.return_value = mock_api_response()
     response = client.post(route, headers=get_headers(valid_jwt()))
     assert response.status_code == HTTPStatus.OK

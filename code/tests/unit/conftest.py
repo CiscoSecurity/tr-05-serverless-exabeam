@@ -118,4 +118,3 @@ def connection_error_expected_relay_response():
                 }
             ]
     }
-
