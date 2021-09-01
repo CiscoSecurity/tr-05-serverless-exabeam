@@ -1,27 +1,32 @@
-from pytest import fixture
 from http import HTTPStatus
-
-from .utils import get_headers
 from unittest.mock import patch
+
+from requests.exceptions import (SSLError,
+                                 ConnectionError,
+                                 MissingSchema,
+                                 InvalidURL)
+from pytest import fixture
+
+from tests.unit.api.utils import get_headers
+from tests.unit.conftest import mock_api_response
+from tests.unit.payloads_for_tests import (
+    EXPECTED_RESPONSE_OF_JWKS_ENDPOINT,
+    RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY
+)
 from api.errors import AUTH_ERROR
-from ..conftest import mock_api_response
 from api.utils import (
     WRONG_PAYLOAD_STRUCTURE,
     WRONG_KEY,
     WRONG_AUDIENCE,
     KID_NOT_FOUND,
-    JWKS_HOST_MISSING
-)
-from ..payloads_for_tests import (
-    EXPECTED_RESPONSE_OF_JWKS_ENDPOINT,
-    RESPONSE_OF_JWKS_ENDPOINT_WITH_WRONG_KEY
+    JWKS_HOST_MISSING,
+    WRONG_JWKS_HOST
 )
 
 
 def routes():
     yield '/health'
     yield '/observe/observables'
-    yield '/refer/observables'
 
 
 @fixture(scope='module', params=routes(), ids=lambda route: f'POST {route}')
@@ -171,3 +176,52 @@ def test_call_with_missing_jwks_host(
     assert response.json == authorization_errors_expected_payload(
         JWKS_HOST_MISSING
     )
+
+
+@patch('requests.get')
+def test_call_with_wrong_jwks_host(
+        mock_request, route, client, valid_jwt,
+        authorization_errors_expected_payload):
+
+    for error in (ConnectionError, InvalidURL):
+        mock_request.side_effect = error()
+
+        response = client.post(route, headers=get_headers(valid_jwt()))
+
+        assert response.status_code == HTTPStatus.OK
+        assert response.json == authorization_errors_expected_payload(
+            WRONG_JWKS_HOST)
+
+
+@patch('requests.request')
+@patch('requests.get')
+def test_call_with_ssl_error(mock_get, mock_request,
+                                    mock_exception_for_ssl_error,
+                                    client, valid_jwt,
+                                    ssl_error_expected_relay_response):
+
+    mock_get.return_value = mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+    mock_request.side_effect = SSLError(mock_exception_for_ssl_error)
+
+    response = client.post('/health',
+                           headers=get_headers(valid_jwt()))
+    assert response.status_code == HTTPStatus.OK
+    assert response.json == ssl_error_expected_relay_response
+
+
+@patch('requests.request')
+@patch('requests.get')
+def test_call_with_connection_error(
+        mock_get, mock_request,
+        client, valid_jwt,
+        connection_error_expected_relay_response):
+
+    mock_get.return_value = mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+    for error in (ConnectionError, MissingSchema):
+        mock_request.side_effect = error()
+
+        response = client.post('/health',
+                               headers=get_headers(valid_jwt()))
+
+        assert response.status_code == HTTPStatus.OK
+        assert response.json == connection_error_expected_relay_response

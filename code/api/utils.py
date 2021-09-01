@@ -3,8 +3,11 @@ from json.decoder import JSONDecodeError
 
 import jwt
 import requests
-from flask import request, jsonify
-from jwt import InvalidSignatureError, DecodeError, InvalidAudienceError
+from flask import request, jsonify, current_app
+from jwt import (InvalidSignatureError,
+                 DecodeError,
+                 InvalidAudienceError,
+                 MissingRequiredClaimError)
 from requests.exceptions import ConnectionError, InvalidURL, HTTPError
 
 from api.errors import AuthorizationError, InvalidArgumentError
@@ -27,10 +30,6 @@ WRONG_JWKS_HOST = ('Wrong jwks_host in JWT payload. Make sure domain follows '
 def get_public_key(jwks_host, token):
     """
     Get public key by requesting it from specified jwks host.
-
-    NOTE. This function is just an example of how one can read and check
-    anything before passing to an API endpoint, and thus it may be modified in
-    any way, replaced by another function, or even removed from the module.
     """
 
     expected_errors = (
@@ -61,10 +60,6 @@ def get_public_key(jwks_host, token):
 def get_auth_token():
     """
     Parse and validate incoming request Authorization header.
-
-    NOTE. This function is just an example of how one can read and check
-    anything before passing to an API endpoint, and thus it may be modified in
-    any way, replaced by another function, or even removed from the module.
     """
     expected_errors = {
         KeyError: NO_AUTH_HEADER,
@@ -82,30 +77,31 @@ def get_jwt():
     """
     Get Authorization token and validate its signature
     against the public key from /.well-known/jwks endpoint.
-
-    NOTE. This function is just an example of how one can read and check
-    anything before passing to an API endpoint, and thus it may be modified in
-    any way, replaced by another function, or even removed from the module.
     """
 
     expected_errors = {
-        KeyError: WRONG_PAYLOAD_STRUCTURE,
-        AssertionError: JWKS_HOST_MISSING,
+        KeyError: JWKS_HOST_MISSING,
+        AssertionError: WRONG_PAYLOAD_STRUCTURE,
         InvalidSignatureError: WRONG_KEY,
         DecodeError: WRONG_JWT_STRUCTURE,
         InvalidAudienceError: WRONG_AUDIENCE,
-        TypeError: KID_NOT_FOUND
+        TypeError: KID_NOT_FOUND,
+        MissingRequiredClaimError: WRONG_PAYLOAD_STRUCTURE
     }
     token = get_auth_token()
     try:
-        jwks_payload = jwt.decode(token, options={'verify_signature': False})
-        assert 'jwks_host' in jwks_payload
-        jwks_host = jwks_payload.get('jwks_host')
+        jwks_host = jwt.decode(
+            token, options={'verify_signature': False}
+        )['jwks_host']
         key = get_public_key(jwks_host, token)
         aud = request.url_root
         payload = jwt.decode(
             token, key=key, algorithms=['RS256'], audience=[aud.rstrip('/')]
         )
+        assert 'host' in payload
+        assert 'key' in payload
+        set_entities_limit(payload)
+        current_app.config['HOST'] = payload['host']
         return payload['key']
     except tuple(expected_errors) as error:
         message = expected_errors[error.__class__]
@@ -116,10 +112,6 @@ def get_json(schema):
     """
     Parse the incoming request's data as JSON.
     Validate it against the specified schema.
-
-    NOTE. This function is just an example of how one can read and check
-    anything before passing to an API endpoint, and thus it may be modified in
-    any way, replaced by another function, or even removed from the module.
     """
 
     data = request.get_json(force=True, silent=True, cache=False)
@@ -138,3 +130,13 @@ def jsonify_data(data):
 
 def jsonify_errors(data):
     return jsonify({'errors': [data]})
+
+
+def set_entities_limit(payload):
+    default = current_app.config['CTR_ENTITIES_LIMIT_DEFAULT']
+    try:
+        value = int(payload['CTR_ENTITIES_LIMIT'])
+        current_app.config['CTR_ENTITIES_LIMIT'] = value \
+            if value in range(1, default + 1) else default
+    except (ValueError, TypeError, KeyError):
+        current_app.config['CTR_ENTITIES_LIMIT'] = default
