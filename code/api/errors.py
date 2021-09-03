@@ -1,6 +1,10 @@
+from http import HTTPStatus
+
+
 AUTH_ERROR = 'authorization error'
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
+CONNECTION_ERROR = 'connection error'
 
 
 class TRFormattedError(Exception):
@@ -38,4 +42,31 @@ class WatchdogError(TRFormattedError):
         super().__init__(
             code='health check failed',
             message='Invalid Health Check'
+        )
+
+
+class ExabeamSSLError(TRFormattedError):
+    def __init__(self, error):
+        error = error.args[0].reason.args[0]
+        message = getattr(error, 'verify_message', error.args[0]).capitalize()
+        super().__init__(
+            UNKNOWN,
+            f'Unable to verify SSL certificate: {message}'
+        )
+
+
+class ExabeamConnectionError(TRFormattedError):
+    def __init__(self, url):
+        super().__init__(
+            CONNECTION_ERROR,
+            'Unable to connect to Exabeam,'
+            f' validate the configured API endpoint: {url}'
+        )
+
+
+class CriticalExabeamResponseError(TRFormattedError):
+    def __init__(self, response):
+        super().__init__(
+            HTTPStatus(response.status_code).phrase,
+            f'Unexpected response from Exabeam: {response.text}'
         )
