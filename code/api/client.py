@@ -5,7 +5,8 @@ from requests.exceptions import (
     ConnectionError,
     MissingSchema,
     InvalidSchema,
-    InvalidURL
+    InvalidURL,
+    InvalidHeader
 )
 
 from api.errors import (
@@ -45,7 +46,7 @@ class ExabeamClient:
             raise ExabeamSSLError(error)
         except (ConnectionError, MissingSchema, InvalidSchema, InvalidURL):
             raise ExabeamConnectionError(self._url)
-        except UnicodeEncodeError:
+        except (UnicodeEncodeError, InvalidHeader):
             raise AuthorizationError(INVALID_CREDENTIALS)
 
         if response.ok:
