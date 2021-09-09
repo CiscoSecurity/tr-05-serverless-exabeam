@@ -3,7 +3,7 @@ from json.decoder import JSONDecodeError
 
 import jwt
 import requests
-from flask import request, jsonify, current_app
+from flask import request, jsonify, current_app, g
 from jwt import (InvalidSignatureError,
                  DecodeError,
                  InvalidAudienceError,
@@ -130,6 +130,25 @@ def jsonify_data(data):
 
 def jsonify_errors(data):
     return jsonify({'errors': [data]})
+
+
+def format_docs(docs):
+    return {'count': len(docs), 'docs': docs}
+
+
+def jsonify_result():
+    result = {'data': {}}
+
+    if g.get('sightings'):
+        result['data']['sightings'] = format_docs(g.sightings)
+
+    if g.get('errors'):
+        result['errors'] = g.errors
+
+        if not result.get('data'):
+            result.pop('data', None)
+
+    return jsonify(result)
 
 
 def set_entities_limit(payload):

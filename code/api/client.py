@@ -1,4 +1,5 @@
 from flask import current_app
+from datetime import datetime, timedelta
 import requests
 from requests.exceptions import (
     SSLError,
@@ -53,3 +54,31 @@ class ExabeamClient:
             return data_extractor(response)
 
         raise CriticalExabeamResponseError(response)
+
+    @staticmethod
+    def _get_payload(indices, observable):
+        return {
+            'clusterWithIndices': [
+                {
+                    'clusterName': 'local',
+                    'indices': indices
+                }
+            ],
+            'query': f'\"{observable}\"',
+            'size': 100,
+            'sortBy': [
+                {
+                    'field': 'indexTime',
+                    'order': 'desc'
+                }
+            ]
+        }
+
+    def get_data(self, observable):
+        today = datetime.today()
+        indices = []
+        for days in range(1, 31):
+            delta = timedelta(days=days)
+            indices.append(f'exabeam-{(today - delta).strftime("%Y.%m.%d")}')
+        response = self._request(path='dl/api/es/search', method='POST', body=self._get_payload(indices, observable))
+        return response['responses'][0]['hits']['hits']
