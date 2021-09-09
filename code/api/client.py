@@ -80,5 +80,7 @@ class ExabeamClient:
         for days in range(1, 31):
             delta = timedelta(days=days)
             indices.append(f'exabeam-{(today - delta).strftime("%Y.%m.%d")}')
-        response = self._request(path='dl/api/es/search', method='POST', body=self._get_payload(indices, observable))
+        response = self._request(path='dl/api/es/search',
+                                 method='POST',
+                                 body=self._get_payload(indices, observable))
         return response['responses'][0]['hits']['hits']
