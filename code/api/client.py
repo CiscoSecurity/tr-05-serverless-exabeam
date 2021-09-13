@@ -1,5 +1,6 @@
-from flask import current_app
 from datetime import datetime, timedelta
+
+from flask import current_app
 import requests
 from requests.exceptions import (
     SSLError,
