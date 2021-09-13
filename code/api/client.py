@@ -14,8 +14,10 @@ from api.errors import (
     AuthorizationError,
     ExabeamSSLError,
     ExabeamConnectionError,
-    CriticalExabeamResponseError
+    CriticalExabeamResponseError,
+    MoreMessagesAvailableWarning
 )
+from api.utils import add_error
 
 
 INVALID_CREDENTIALS = 'wrong key'
@@ -27,6 +29,9 @@ class ExabeamClient:
             'ExaAuthToken': key,
             'User-Agent': current_app.config['USER_AGENT']
         }
+        self._entities_limit = current_app.config['CTR_ENTITIES_LIMIT']
+        self._entities_limit_default = current_app.config[
+            'CTR_ENTITIES_LIMIT_DEFAULT']
 
     @property
     def _url(self):
@@ -65,7 +70,7 @@ class ExabeamClient:
                 }
             ],
             'query': f'\"{observable}\"',
-            'size': 100,
+            'size': 101,
             'sortBy': [
                 {
                     'field': 'indexTime',
@@ -83,4 +88,7 @@ class ExabeamClient:
         response = self._request(path='dl/api/es/search',
                                  method='POST',
                                  body=self._get_payload(indices, observable))
-        return response['responses'][0]['hits']['hits']
+        hits = response['responses'][0]['hits']['hits']
+        if len(hits) > self._entities_limit_default:
+            add_error(MoreMessagesAvailableWarning(observable))
+        return hits[:self._entities_limit]

@@ -151,6 +151,10 @@ def jsonify_result():
     return jsonify(result)
 
 
+def add_error(error):
+    g.errors = [*g.get('errors', []), error.json]
+
+
 def set_entities_limit(payload):
     default = current_app.config['CTR_ENTITIES_LIMIT_DEFAULT']
     try:
