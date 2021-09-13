@@ -150,7 +150,7 @@ def bad_request_expected_relay_response():
     }
 
 
-@fixture
+@fixture(scope='module')
 def expected_exabeam_response():
     return {
         'responses': [
@@ -263,7 +263,7 @@ def expected_exabeam_response():
     }
 
 
-@fixture
+@fixture(scope='module')
 def expected_relay_response(success_observe_body):
     def _make_payload(route):
         payload_to_route_match = {
@@ -274,7 +274,7 @@ def expected_relay_response(success_observe_body):
     return _make_payload
 
 
-@fixture
+@fixture(scope='module')
 def success_observe_body():
     return {
         'data': {

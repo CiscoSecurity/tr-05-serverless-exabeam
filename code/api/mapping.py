@@ -24,9 +24,9 @@ class Sighting:
     def _sighting(self, data, observable):
         sighting = {
             'description': f'```\n{data.get("_source", {}).get("message")}'
-                           f'\n```',
+                           '\n```',
             'short_description': self._short_description(
-                data.get("_source", {})
+                data.get('_source', {})
             ),
             'external_ids': [
                 data.get('_id')
@@ -37,7 +37,7 @@ class Sighting:
                 'start_time': data.get('_source', {}).get('exa_rawEventTime')
             },
             'data': self._data_table(data),
-            'source_uri': self.sighting_source_uri(data.get("_id", {})),
+            'source_uri': self.sighting_source_uri(data.get('_id', {})),
             **SIGHTING_DEFAULTS
         }
 
@@ -58,8 +58,8 @@ class Sighting:
         params = '_g=(time:(from:now-30d))&' \
                  '_a=(interval:(text:Auto,val:auto),' \
                  'query:(query_string:(default_field:message,' \
-                 f"query:'_id:%22{value}%22'))," \
-                 f"queryString:'_id:%22{value}%22'," \
+                 f'query:\'_id:%22{value}%22\')),' \
+                 f'queryString:\'_id:%22{value}%22\',' \
                  'searchExecuted:!t,sort:!(indexTime,desc),' \
                  'uiState:(vis:(colors:(Count:%23139df2))))'
 
