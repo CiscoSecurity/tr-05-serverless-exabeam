@@ -70,3 +70,14 @@ class CriticalExabeamResponseError(TRFormattedError):
             HTTPStatus(response.status_code).phrase,
             f'Unexpected response from Exabeam: {response.text}'
         )
+
+
+class MoreMessagesAvailableWarning(TRFormattedError):
+    def __init__(self, observable):
+        super().__init__(
+            'too-many-messages-warning',
+            f'There are more messages in Exabeam for {observable}'
+            ' than can be displayed in Threat Response. Login to the '
+            'Exabeam console to see all messages.',
+            type_='warning'
+        )

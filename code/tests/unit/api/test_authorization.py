@@ -4,7 +4,8 @@ from unittest.mock import patch
 from requests.exceptions import (SSLError,
                                  ConnectionError,
                                  MissingSchema,
-                                 InvalidURL)
+                                 InvalidURL,
+                                 InvalidHeader)
 from pytest import fixture
 
 from tests.unit.api.utils import get_headers
@@ -229,3 +230,22 @@ def test_call_with_connection_error(
 
         assert response.status_code == HTTPStatus.OK
         assert response.json == connection_error_expected_relay_response
+
+
+@patch('requests.request')
+@patch('requests.get')
+def test_call_with_invalid_header(
+        mock_get, mock_request,
+        client, valid_jwt, invalid_header_error_expected_relay_response
+):
+
+    mock_get.return_value = mock_api_response(
+        payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    )
+    mock_request.side_effect = InvalidHeader()
+
+    response = client.post('/health',
+                           headers=get_headers(valid_jwt()))
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json == invalid_header_error_expected_relay_response

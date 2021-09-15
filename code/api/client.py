@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from flask import current_app
 import requests
 from requests.exceptions import (
@@ -13,8 +15,10 @@ from api.errors import (
     AuthorizationError,
     ExabeamSSLError,
     ExabeamConnectionError,
-    CriticalExabeamResponseError
+    CriticalExabeamResponseError,
+    MoreMessagesAvailableWarning
 )
+from api.utils import add_error
 
 
 INVALID_CREDENTIALS = 'wrong key'
@@ -26,6 +30,9 @@ class ExabeamClient:
             'ExaAuthToken': key,
             'User-Agent': current_app.config['USER_AGENT']
         }
+        self._entities_limit = current_app.config['CTR_ENTITIES_LIMIT']
+        self._entities_limit_default = current_app.config[
+            'CTR_ENTITIES_LIMIT_DEFAULT']
 
     @property
     def _url(self):
@@ -53,3 +60,36 @@ class ExabeamClient:
             return data_extractor(response)
 
         raise CriticalExabeamResponseError(response)
+
+    @staticmethod
+    def _get_payload(indices, observable):
+        return {
+            'clusterWithIndices': [
+                {
+                    'clusterName': 'local',
+                    'indices': indices
+                }
+            ],
+            'query': f'\"{observable}\"',
+            'size': 101,
+            'sortBy': [
+                {
+                    'field': 'indexTime',
+                    'order': 'desc'
+                }
+            ]
+        }
+
+    def get_data(self, observable):
+        today = datetime.today()
+        indices = []
+        for days in range(1, 31):
+            delta = timedelta(days=days)
+            indices.append(f'exabeam-{(today - delta).strftime("%Y.%m.%d")}')
+        response = self._request(path='dl/api/es/search',
+                                 method='POST',
+                                 body=self._get_payload(indices, observable))
+        hits = response['responses'][0]['hits']['hits']
+        if len(hits) > self._entities_limit_default:
+            add_error(MoreMessagesAvailableWarning(observable))
+        return hits[:self._entities_limit]
