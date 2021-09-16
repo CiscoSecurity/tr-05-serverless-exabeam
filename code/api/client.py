@@ -70,7 +70,8 @@ class ExabeamClient:
                     'indices': indices
                 }
             ],
-            'query': f'\"{observable}\"',
+            'query': f'"{observable}" AND NOT (event_subtype:'
+                     '"Exabeam Audit Event")',
             'size': 101,
             'sortBy': [
                 {
