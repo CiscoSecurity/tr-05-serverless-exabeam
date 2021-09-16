@@ -264,11 +264,11 @@ def expected_exabeam_response():
 
 
 @fixture(scope='module')
-def expected_relay_response(success_observe_body):
+def expected_relay_response(success_observe_body, success_refer_body):
     def _make_payload(route):
         payload_to_route_match = {
             '/observe/observables': success_observe_body,
-            '/refer/observables': {}
+            '/refer/observables': success_refer_body
         }
         return payload_to_route_match[route]
     return _make_payload
@@ -439,16 +439,16 @@ def success_observe_body():
                                              'nternal containing the observab'
                                              'le',
                         'source': 'Exabeam',
-                        'source_uri': 'https://exabeam.com/data/app/dataui#/d'
-                                      'iscover?_g=(time:(from:now-30d))&_a=(i'
-                                      'nterval:(text:Auto,val:auto),query:(qu'
-                                      'ery_string:(default_field:message,quer'
-                                      'y:\'_id:%22lms.kafka.topic_10_35121_bb'
-                                      '3b8a648af1%22\')),queryString:\'_id:%2'
-                                      '2lms.kafka.topic_10_35121_bb3b8a648af1'
-                                      '%22\',searchExecuted:!t,sort:!(indexTi'
-                                      'me,desc),uiState:(vis:(colors:(Count:%'
-                                      '23139df2))))',
+                        'source_uri': 'https://exabeam.com/data/app/dataui#/di'
+                                      'scover?_g=(time:(from:now-30d))&_a=(int'
+                                      'erval:(text:Auto,val:auto),query:(query'
+                                      '_string:(default_field:message,query:\''
+                                      '_id:%22lms.kafka.topic_10_35121_bb3b8a6'
+                                      '48af1%22\')),queryString:\'_id:%22lms.k'
+                                      'afka.topic_10_35121_bb3b8a648af1%22\',s'
+                                      'earchExecuted:!t,sort:!(indexTime,desc)'
+                                      ',uiState:(vis:(colors:(Count:%23139df2)'
+                                      ')))',
                         'title': 'Log message received by Exabeam in last 30 '
                                  'days contains observable',
                         'type': 'sighting'
@@ -456,4 +456,33 @@ def success_observe_body():
                 ]
             }
         }
+    }
+
+
+@fixture(scope='module')
+def success_refer_body():
+    return {
+        'data':
+            [
+                {
+                    'categories':
+                        [
+                            'Search',
+                            'Exabeam'
+                        ],
+                    'description': 'Search for this domain in the '
+                                   'Exabeam Data Lake',
+                    'id': 'ref-exabeam-search-domain-cisco.com',
+                    'title': 'Search for this domain',
+                    'url': 'https://exabeam.com/data/app/dataui#/discover?_g=('
+                           'time:(from:now-30d))&_a=(interval:(text:Auto,val:a'
+                           'uto),query:(query_string:(default_field:message,qu'
+                           'ery:\'%22cisco.com%22%20AND%20NOT%20(event_sub'
+                           'type:%22Exabeam%20Audit%20Event%22)\')),queryStrin'
+                           'g:\'%22cisco.com%22%20AND%20NOT%20(event_subty'
+                           'pe:%22Exabeam%20Audit%20Event%22)\',searchExecuted'
+                           ':!t,sort:!(indexTime,desc),uiState:(vis:(colors:(C'
+                           'ount:%23139df2))))'
+                }
+            ]
     }
