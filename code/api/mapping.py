@@ -20,6 +20,12 @@ SIGHTING_DEFAULTS = {
 }
 
 
+def source_uri(value, params):
+    url = f'https://{current_app.config["HOST"]}'
+    path = '/data/app/dataui#/discover'
+    return f'{url}{path}?{params.format(value=value)}'
+
+
 class Sighting:
     def _sighting(self, data, observable):
         sighting = {
@@ -53,17 +59,8 @@ class Sighting:
 
     @staticmethod
     def sighting_source_uri(value):
-        url = f'https://{current_app.config["HOST"]}'
-        path = '/data/app/dataui#/discover'
-        params = '_g=(time:(from:now-30d))&' \
-                 '_a=(interval:(text:Auto,val:auto),' \
-                 'query:(query_string:(default_field:message,' \
-                 f'query:\'_id:%22{value}%22\')),' \
-                 f'queryString:\'_id:%22{value}%22\',' \
-                 'searchExecuted:!t,sort:!(indexTime,desc),' \
-                 'uiState:(vis:(colors:(Count:%23139df2))))'
-
-        return f'{url}{path}?{params}'
+        params = current_app.config['URL_PARAMS_FOR_SIGHTING']
+        return source_uri(value, params)
 
     @staticmethod
     def _short_description(data):
