@@ -75,3 +75,18 @@ def test_enrich_call_with_bad_request_error(
                            json=valid_json)
     assert response.status_code == HTTPStatus.OK
     assert response.json == bad_request_expected_relay_response
+
+
+@patch('requests.get')
+def test_enrich_refer_call_success(
+        mock_get, client,
+        valid_jwt, valid_json, expected_relay_response
+):
+    mock_get.return_value = \
+        mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
+
+    response = client.post(REFER_ROUTE,
+                           headers=get_headers(valid_jwt()),
+                           json=valid_json)
+    assert response.status_code == HTTPStatus.OK
+    assert response.json == expected_relay_response(REFER_ROUTE)
