@@ -470,7 +470,7 @@ def success_refer_body():
                             'Search',
                             'Exabeam'
                         ],
-                    'description': 'Search for this domain in the '
+                    'description': 'Search for this domain in '
                                    'Exabeam Data Lake',
                     'id': 'ref-exabeam-search-domain-cisco.com',
                     'title': 'Search for this domain',
