@@ -50,7 +50,7 @@ def refer_observables():
             'description': (
                 'Search for this '
                 f'{obs_types_map.get(observable["type"], observable["type"])}'
-                ' in the Exabeam Data Lake'
+                ' in Exabeam Data Lake'
             ),
             'url': source_uri(observable['value'], params),
             'categories': ['Search', 'Exabeam']
