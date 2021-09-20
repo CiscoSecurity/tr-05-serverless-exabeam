@@ -151,6 +151,19 @@ def bad_request_expected_relay_response():
 
 
 @fixture(scope='module')
+def unknown_response_code_relay_response():
+    return {
+        'errors': [
+            {
+                'code': 522,
+                'message': 'Unexpected response from Exabeam: None',
+                'type': 'fatal'
+            }
+        ]
+    }
+
+
+@fixture(scope='module')
 def expected_exabeam_response():
     return {
         'responses': [
