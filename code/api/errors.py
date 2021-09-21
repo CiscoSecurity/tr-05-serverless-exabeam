@@ -66,8 +66,12 @@ class ExabeamConnectionError(TRFormattedError):
 
 class CriticalExabeamResponseError(TRFormattedError):
     def __init__(self, response):
+        try:
+            code = HTTPStatus(response.status_code).phrase
+        except ValueError:
+            code = response.status_code
         super().__init__(
-            HTTPStatus(response.status_code).phrase,
+            code,
             f'Unexpected response from Exabeam: {response.text}'
         )
 
