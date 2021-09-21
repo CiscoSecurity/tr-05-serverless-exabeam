@@ -249,3 +249,22 @@ def test_call_with_invalid_header(
 
     assert response.status_code == HTTPStatus.OK
     assert response.json == invalid_header_error_expected_relay_response
+
+
+@patch('requests.request')
+@patch('requests.get')
+def test_call_with_unknown_status_code(
+        mock_get, mock_request,
+        client, valid_jwt, unknown_response_code_relay_response
+):
+
+    mock_get.return_value = mock_api_response(
+        payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
+    )
+    mock_request.return_value = mock_api_response(status_code=522)
+
+    response = client.post('/health',
+                           headers=get_headers(valid_jwt()))
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json == unknown_response_code_relay_response
