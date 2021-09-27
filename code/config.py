@@ -67,3 +67,9 @@ class Config:
                            't_subtype:%22Exabeam%20Audit%20Event%22)\',sear' \
                            'chExecuted:!t,sort:!(indexTime,desc),uiState:(v' \
                            'is:(colors:(Count:%23139df2))))'
+
+    TILE_PERIODS_MAP = {
+        'last_24_hours': 1,
+        'last_7_days': 7,
+        'last_30_days': 30
+    }
