@@ -36,4 +36,5 @@ def tile_data():
         json.dumps(aggregation_query),
         current_app.config['TILE_PERIODS_MAP'][payload['period']]
     )
-    return jsonify_data(tile_object.tile_data(visualize_data, payload['period']))
+    return jsonify_data(tile_object.tile_data(visualize_data,
+                                              payload['period']))

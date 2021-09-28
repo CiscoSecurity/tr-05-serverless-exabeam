@@ -30,7 +30,8 @@ class AffectedIPsTile(AbstractTile):
 
     @property
     def _description(self):
-        return 'Affected IPs chart shows how many IPs are ransomware, threat or tor'
+        return 'Affected IPs chart shows how many IPs are ransomware, ' \
+               'threat or tor'
 
     @property
     def _tags(self):

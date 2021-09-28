@@ -1,1 +1,1 @@
-from api.tiles.affected_ips import AffectedIPsTile
+from api.tiles.affected_ips import AffectedIPsTile  # noqa: F401
