@@ -4,9 +4,15 @@ from collections import namedtuple
 
 from pytest import fixture
 
-from tests.unit.api.utils import get_headers
 from api.errors import INVALID_ARGUMENT
-from tests.unit.conftest import mock_api_response
+from tests.unit.api.utils import get_headers
+from tests.unit.conftest import (
+    mock_api_response,
+    relay_response_tile_data,
+    relay_response_tiles,
+    relay_response_tiles_tile,
+    exabeam_response_tile
+)
 from tests.unit.payloads_for_tests import EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
 
 WrongCall = namedtuple('WrongCall', ('endpoint', 'payload', 'message'))
@@ -92,21 +98,54 @@ def test_dashboard_call_with_wrong_payload(mock_request,
     )
 
 
-def routes():
-    yield '/tiles'
-    yield '/tiles/tile'
-    yield '/tiles/tile-data'
+SuccessCall = namedtuple('SuccessCall', ('endpoint',
+                                         'payload',
+                                         'exabeam_response',
+                                         'relay_response'))
 
 
-@fixture(scope='module', params=routes(), ids=lambda route: f'POST {route}')
-def route(request):
+def success_calls():
+    yield SuccessCall(
+        '/tiles/tile-data',
+        {'tile_id': 'affected_ips', 'period': 'last_30_days'},
+        exabeam_response_tile(),
+        relay_response_tile_data()
+    )
+    yield SuccessCall(
+        '/tiles',
+        {},
+        {},
+        relay_response_tiles()
+    )
+    yield SuccessCall(
+        '/tiles/tile',
+        {'tile_id': 'affected_ips'},
+        {},
+        relay_response_tiles_tile()
+    )
+
+
+@fixture(scope='module',
+         params=success_calls(),
+         ids=lambda call: f'POST {call.endpoint}')
+def success_call(request):
     return request.param
 
 
+@patch('requests.request')
 @patch('requests.get')
-def test_dashboard_call_success(mock_get, route, client, valid_jwt):
+def test_dashboard_call_success(mock_get, mock_request,
+                                success_call, client, valid_jwt):
     mock_get.return_value = mock_api_response(
         payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
     )
-    response = client.post(route, headers=get_headers(valid_jwt()))
+    mock_request.return_value = \
+        mock_api_response(payload=success_call.exabeam_response)
+    response = client.post(success_call.endpoint,
+                           headers=get_headers(valid_jwt()),
+                           json=success_call.payload)
     assert response.status_code == HTTPStatus.OK
+    if success_call.endpoint == '/tiles/tile-data':
+        assert response.json['data']['data'] == success_call.relay_response
+    else:
+        assert response.json == success_call.relay_response
