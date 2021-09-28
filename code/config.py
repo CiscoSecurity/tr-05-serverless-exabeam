@@ -68,6 +68,15 @@ class Config:
                            'chExecuted:!t,sort:!(indexTime,desc),uiState:(v' \
                            'is:(colors:(Count:%23139df2))))'
 
+    URL_PARAMS_FOR_TILE = '_g=(time:(from:now-30d))&_a=(interval:(text:Auto' \
+                          ',val:auto),query:(query_string:(default_field:me' \
+                          'ssage,query:\'{value}%20AND%20NOT%20(event_subty' \
+                          'pe:%22Exabeam%20Audit%20Event%22)\')),queryStrin' \
+                          'g:\'{value}%20AND%20NOT%20(event_subtype:%22Exab' \
+                          'eam%20Audit%20Event%22)\',searchExecuted:!t,sort' \
+                          ':!(indexTime,desc),uiState:(vis:(colors:(Count:%' \
+                          '23139df2))))'
+
     TILE_PERIODS_MAP = {
         'last_24_hours': 1,
         'last_7_days': 7,

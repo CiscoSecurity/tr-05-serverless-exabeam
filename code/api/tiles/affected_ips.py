@@ -6,7 +6,11 @@ from api.utils import source_uri
 
 class AffectedIPsTile(AbstractTile):
     def __init__(self):
-        self.aggregation_fields = ['is_ransomware_src_ip', 'is_threat_src_ip', 'is_tor_src_ip']
+        self.aggregation_fields = {
+            'is_ransomware_src_ip': 'Ransomware IPs',
+            'is_threat_src_ip': 'Threat IPs',
+            'is_tor_src_ip': 'Tor IPs'
+        }
 
     @property
     def _id(self):
@@ -37,23 +41,26 @@ class AffectedIPsTile(AbstractTile):
         return ['last_30_days']
 
     @staticmethod
-    def _data_item(label, value):
+    def _data_item(field, label, value):
         return {
             'icon': 'warning',
             'label': label,
             'value': value,
             'value_unit': 'integer',
-            'link_uri': source_uri(label, current_app.config['URL_PARAMS_FOR_REFER'])
+            'link_uri': source_uri(
+                f'{field}:"true"',
+                current_app.config['URL_PARAMS_FOR_TILE']
+            )
         }
 
     def _data(self, visualize_data):
         data = []
-        for field in self.aggregation_fields:
+        for field, label in self.aggregation_fields.items():
             value = 0
             for bucket in visualize_data[field]['buckets']:
                 if bucket['key']:
                     value = bucket['doc_count']
-            data.append(self._data_item(field, value))
+            data.append(self._data_item(field, label, value))
 
         return data
 
@@ -67,7 +74,7 @@ class AffectedIPsTile(AbstractTile):
             'observed_time': self._observed_time(period),
             'valid_time': self._valid_time(period),
             'data': self._data(visualize_data),
-            'cache_scope': 'none'
+            'cache_scope': self._cache_scope()
         }
 
     def tile(self):
