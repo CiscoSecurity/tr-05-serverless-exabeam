@@ -69,15 +69,15 @@ class AbstractTile(ABC):
     @abstractmethod
     def aggregation_query(self):
         """Returns query which is used
-        by client to make a visualize request"""
+        by client to make a visualize request."""
 
     @abstractmethod
     def tile_data(self):
-        """Returns data for /tiles/tile-data endpoint"""
+        """Returns data for /tiles/tile-data endpoint."""
 
     @abstractmethod
     def tile(self):
-        """Returns data for /tiles/tile endpoint"""
+        """Returns data for /tiles/tile endpoint."""
 
 
 class TileFactory:
