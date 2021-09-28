@@ -28,8 +28,7 @@ class ExabeamClient:
     def __init__(self, key):
         self._headers = {
             'ExaAuthToken': key,
-            'User-Agent': current_app.config['USER_AGENT'],
-            'Content-Type': 'application/json'
+            'User-Agent': current_app.config['USER_AGENT']
         }
         self._entities_limit = current_app.config['CTR_ENTITIES_LIMIT']
         self._entities_limit_default = current_app.config[
