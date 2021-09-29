@@ -75,9 +75,17 @@ class AbstractTile(ABC):
     def tile_data(self):
         """Returns data for /tiles/tile-data endpoint."""
 
-    @abstractmethod
     def tile(self):
         """Returns data for /tiles/tile endpoint."""
+        return {
+            'id': self._id,
+            'type': self._type,
+            'title': self._title,
+            'short_description': self._short_description,
+            'description': self._description,
+            'tags': self._tags,
+            'periods': self._periods
+        }
 
 
 class TileFactory:

@@ -6,7 +6,7 @@ from api.utils import source_uri
 
 class AffectedIPsTile(AbstractTile):
     def __init__(self):
-        self.aggregation_fields = {
+        self._aggregation_fields = {
             'is_ransomware_src_ip': 'Ransomware IPs',
             'is_threat_src_ip': 'Threat IPs',
             'is_tor_src_ip': 'Tor IPs'
@@ -56,10 +56,10 @@ class AffectedIPsTile(AbstractTile):
 
     def _data(self, visualize_data):
         data = []
-        for field, label in self.aggregation_fields.items():
+        for field, label in self._aggregation_fields.items():
             value = 0
             for bucket in visualize_data[field]['buckets']:
-                if bucket['key']:
+                if bucket.get('key'):
                     value = bucket['doc_count']
             data.append(self._data_item(field, label, value))
 
@@ -67,7 +67,7 @@ class AffectedIPsTile(AbstractTile):
 
     def aggregation_query(self):
         aggregation_query = {field: {'terms': {'field': field}}
-                             for field in self.aggregation_fields}
+                             for field in self._aggregation_fields}
         return aggregation_query
 
     def tile_data(self, visualize_data, period):
@@ -76,15 +76,4 @@ class AffectedIPsTile(AbstractTile):
             'valid_time': self._valid_time(period),
             'data': self._data(visualize_data),
             'cache_scope': self._cache_scope()
-        }
-
-    def tile(self):
-        return {
-            'id': self._id,
-            'type': self._type,
-            'title': self._title,
-            'short_description': self._short_description,
-            'description': self._description,
-            'tags': self._tags,
-            'periods': self._periods
         }
