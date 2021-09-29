@@ -163,3 +163,9 @@ def set_entities_limit(payload):
             if value in range(1, default + 1) else default
     except (ValueError, TypeError, KeyError):
         current_app.config['CTR_ENTITIES_LIMIT'] = default
+
+
+def source_uri(value, params):
+    url = f'https://{current_app.config["HOST"]}'
+    path = '/data/app/dataui#/discover'
+    return f'{url}{path}?{params.format(value=value)}'
