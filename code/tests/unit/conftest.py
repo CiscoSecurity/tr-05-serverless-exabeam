@@ -634,41 +634,42 @@ def relay_response_affected_ips():
 
 def relay_response_activity_types():
     return [
-        {'key': 0,
-         'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(time:('
-                     'from:now-30d))&_a=(interval:(text:Auto,val:auto),query:('
-                     'query_string:(default_field:message,query:\'object-acces'
-                     's:"true"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit'
-                     '%20Event%22)\')),queryString:\'object-access:"true"%20AN'
-                     'D%20NOT%20(event_subtype:%22Exabeam%20Audit%20Event%22)'
-                     '\',searchExecuted:!t,sort:!(indexTime,desc),uiState:(vis'
-                     ':(colors:(Count:%23139df2))))',
-         'value': 303061
-         },
+        {
+            'key': 0,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_activity_type:"object-access"%20AND%20NOT%20(eve'
+                        'nt_subtype:%22Exabeam%20Audit%20Event%22)\')),queryS'
+                        'tring:\'exa_activity_type:"object-access"%20AND%20NO'
+                        'T%20(event_subtype:%22Exabeam%20Audit%20Event%22)\','
+                        'searchExecuted:!t,sort:!(indexTime,desc),uiState:(vi'
+                        's:(colors:(Count:%23139df2))))',
+            'value': 303061
+        },
         {
             'key': 1,
             'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
                         'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
                         ',query:(query_string:(default_field:message,query:\''
-                        'object-access/write:"true"%20AND%20NOT%20(event_subt'
-                        'ype:%22Exabeam%20Audit%20Event%22)\')),queryString:'
-                        '\'object-access/write:"true"%20AND%20NOT%20(event_su'
-                        'btype:%22Exabeam%20Audit%20Event%22)\',searchExecute'
-                        'd:!t,sort:!(indexTime,desc),uiState:(vis:(colors:(Co'
-                        'unt:%23139df2))))',
-            'value': 156235
-        },
+                        'exa_activity_type:"object-access/write"%20AND%20NOT%'
+                        '20(event_subtype:%22Exabeam%20Audit%20Event%22)\')),'
+                        'queryString:\'exa_activity_type:"object-access/write'
+                        '"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%20'
+                        'Event%22)\',searchExecuted:!t,sort:!(indexTime,desc)'
+                        ',uiState:(vis:(colors:(Count:%23139df2))))',
+            'value': 156235},
         {
             'key': 2,
             'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
                         'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
                         ',query:(query_string:(default_field:message,query:\''
-                        'object-access/delete:"true"%20AND%20NOT%20(event_sub'
-                        'type:%22Exabeam%20Audit%20Event%22)\')),queryString:'
-                        '\'object-access/delete:"true"%20AND%20NOT%20(event_s'
-                        'ubtype:%22Exabeam%20Audit%20Event%22)\',searchExecut'
-                        'ed:!t,sort:!(indexTime,desc),uiState:(vis:(colors:(C'
-                        'ount:%23139df2))))',
+                        'exa_activity_type:"object-access/delete"%20AND%20NOT'
+                        '%20(event_subtype:%22Exabeam%20Audit%20Event%22)\'))'
+                        ',queryString:\'exa_activity_type:"object-access/dele'
+                        'te"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%'
+                        '20Event%22)\',searchExecuted:!t,sort:!(indexTime,des'
+                        'c),uiState:(vis:(colors:(Count:%23139df2))))',
             'value': 146194
         }
     ]

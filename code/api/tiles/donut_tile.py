@@ -10,12 +10,12 @@ class DonutTile(AbstractTile):
         return ['last_30_days']
 
     @staticmethod
-    def _data_item(field, key, value):
+    def _data_item(label_index, value, field, field_value):
         return {
-            'key': key,
+            'key': label_index,
             'value': value,
             'link_uri': source_uri(
-                f'{field}:"true"',
+                f'{field.split(".")[0]}:"{field_value}"',
                 current_app.config['URL_PARAMS_FOR_TILE']
             )
         }
@@ -25,9 +25,10 @@ class DonutTile(AbstractTile):
         labels = self._labels(visualize_data)[0]
         for field in self._aggregation_fields:
             for bucket in visualize_data[field]['buckets']:
-                data.append(self._data_item(bucket.get('key'),
-                                            labels.index(bucket.get('key')),
-                                            bucket['doc_count']))
+                data.append(self._data_item(labels.index(bucket.get('key')),
+                                            bucket['doc_count'],
+                                            field,
+                                            bucket.get('key')))
         return data
 
     def _labels(self, visualize_data):
