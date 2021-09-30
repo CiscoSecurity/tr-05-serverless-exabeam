@@ -555,7 +555,7 @@ def exabeam_response_activity_types():
             'exa_activity_type.keyword': {
                 'doc_count_error_upper_bound': 0,
                 'sum_other_doc_count': 0,
-                "buckets": [
+                'buckets': [
                     {
                         'key': 'object-access',
                         'doc_count': 303061
