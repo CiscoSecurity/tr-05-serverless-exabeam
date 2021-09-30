@@ -58,11 +58,6 @@ class AbstractTile(ABC):
 
     @property
     @abstractmethod
-    def _tags(self):
-        """Returns tile tags."""
-
-    @property
-    @abstractmethod
     def _periods(self):
         """Returns tile available periods to represent data."""
 
@@ -70,6 +65,11 @@ class AbstractTile(ABC):
     def aggregation_query(self):
         """Returns query which is used
         by client to make a visualize request."""
+
+    @property
+    def _tags(self):
+        """Returns tile tags."""
+        return [self._id]
 
     @abstractmethod
     def tile_data(self):

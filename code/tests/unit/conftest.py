@@ -678,7 +678,8 @@ def relay_response_activity_types():
 def relay_response_tiles():
     return {
         'data': [affected_ips_tile(),
-                 activity_types_tile()]
+                 activity_types_tile(),
+                 categories_tile()]
     }
 
 
@@ -710,5 +711,18 @@ def activity_types_tile():
         'short_description': 'Activity types found in Exabeam Data Lake',
         'tags': ['activity_types'],
         'title': 'Activity Types',
+        'type': 'donut_graph'
+    }
+
+
+def categories_tile():
+    return {
+        'description': 'Log categories chart shows distribution of logs by '
+                       'its categories.',
+        'id': 'categories',
+        'periods': ['last_30_days'],
+        'short_description': 'Log categories found in Exabeam Data Lake',
+        'tags': ['categories'],
+        'title': 'Categories',
         'type': 'donut_graph'
     }
