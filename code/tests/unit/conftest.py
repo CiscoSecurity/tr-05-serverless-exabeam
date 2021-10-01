@@ -747,7 +747,8 @@ def relay_response_tiles():
     return {
         'data': [affected_ips_tile(),
                  activity_types_tile(),
-                 categories_tile()]
+                 categories_tile(),
+                 activity_types_per_day_tile()]
     }
 
 
@@ -793,4 +794,19 @@ def categories_tile():
         'tags': ['categories'],
         'title': 'Categories',
         'type': 'donut_graph'
+    }
+
+
+def activity_types_per_day_tile():
+    return {
+        'description': 'Activity types per day chart shows dynamic of '
+                       'activity types found in Exabeam Data Lake for the '
+                       'last 7 days',
+        'id': 'activity_types_per_day',
+        'periods': ['last_7_days'],
+        'short_description': 'Activity types found in Exabeam Data Lake per '
+                             'day',
+        'tags': ['activity_types_per_day'],
+        'title': 'Activity types per day',
+        'type': 'horizontal_bar_chart'
     }

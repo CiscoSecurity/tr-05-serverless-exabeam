@@ -11,7 +11,7 @@ class HorizontalBarTile(AbstractTile, ABC):
     @property
     @abstractmethod
     def _aggregation_field(self):
-        """Returns a filed with help of which aggregation query is created"""
+        """Returns a field with help of which aggregation query is created"""
 
     @property
     def _periods(self):

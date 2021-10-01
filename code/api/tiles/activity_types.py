@@ -2,8 +2,9 @@ from api.tiles.donut_tile import DonutTile
 
 
 class ActivityTypesTile(DonutTile):
-    def __init__(self):
-        self._aggregation_fields = ['exa_activity_type.keyword']
+    @property
+    def _aggregation_field(self):
+        return 'exa_activity_type.keyword'
 
     @property
     def _id(self):
