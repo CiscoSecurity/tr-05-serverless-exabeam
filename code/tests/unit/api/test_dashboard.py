@@ -110,7 +110,8 @@ def success_calls():
     tiles_data = [('affected_ips', last_thirty_days),
                   ('activity_types', last_thirty_days),
                   ('categories', last_thirty_days),
-                  ('activity_types_per_day', last_seven_days)]
+                  ('activity_types_per_day', last_seven_days),
+                  ('categories_per_day', last_seven_days)]
     for tile_id, period in tiles_data:
         yield SuccessCall(
             '/tiles/tile-data',
@@ -118,17 +119,17 @@ def success_calls():
             exabeam_response_tile(tile_id),
             relay_response_tile_data(tile_id)
         )
+        yield SuccessCall(
+            '/tiles/tile',
+            {'tile_id': tile_id},
+            {},
+            relay_response_tiles_tile(tile_id)
+        )
     yield SuccessCall(
         '/tiles',
         {},
         {},
         relay_response_tiles()
-    )
-    yield SuccessCall(
-        '/tiles/tile',
-        {'tile_id': 'affected_ips'},
-        {},
-        relay_response_tiles_tile()
     )
 
 
