@@ -34,10 +34,6 @@ class AffectedIPsTile(AbstractTile):
                'threat or tor'
 
     @property
-    def _tags(self):
-        return ['affected_ips']
-
-    @property
     def _periods(self):
         return ['last_30_days']
 

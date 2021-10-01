@@ -10,10 +10,6 @@ class ActivityTypesTile(DonutTile):
         return 'activity_types'
 
     @property
-    def _type(self):
-        return 'donut_graph'
-
-    @property
     def _title(self):
         return 'Activity Types'
 
@@ -25,7 +21,3 @@ class ActivityTypesTile(DonutTile):
     def _description(self):
         return 'Activity types chart shows distribution of events ' \
                'that triggered log creation by its types.'
-
-    @property
-    def _tags(self):
-        return ['activity_types']

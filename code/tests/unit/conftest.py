@@ -504,7 +504,8 @@ def success_refer_body():
 def exabeam_response_tile(tile_id):
     tile_id_map = {
         'affected_ips': exabeam_response_affected_ips(),
-        'activity_types': exabeam_response_activity_types()
+        'activity_types': exabeam_response_activity_types(),
+        'categories': exabeam_response_categories()
     }
     return tile_id_map[tile_id]
 
@@ -574,10 +575,36 @@ def exabeam_response_activity_types():
     }
 
 
+def exabeam_response_categories():
+    return {
+        'aggregations': {
+            'exa_category.keyword': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 'File',
+                        'doc_count': 302998
+                    },
+                    {
+                        'key': 'DLP',
+                        'doc_count': 213888
+                    },
+                    {
+                        'key': 'Application',
+                        'doc_count': 664
+                    }
+                ]
+            }
+        }
+    }
+
+
 def relay_response_tile_data(tile_id):
     tile_id_map = {
         'affected_ips': relay_response_affected_ips(),
-        'activity_types': relay_response_activity_types()
+        'activity_types': relay_response_activity_types(),
+        'categories': relay_response_categories()
     }
     return tile_id_map[tile_id]
 
@@ -675,10 +702,52 @@ def relay_response_activity_types():
     ]
 
 
+def relay_response_categories():
+    return [
+        {
+            'key': 0,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"File"%20AND%20NOT%20(event_subtype:%22'
+                        'Exabeam%20Audit%20Event%22)\')),queryString:\'exa_ca'
+                        'tegory:"File"%20AND%20NOT%20(event_subtype:%22Exabea'
+                        'm%20Audit%20Event%22)\',searchExecuted:!t,sort:!(ind'
+                        'exTime,desc),uiState:(vis:(colors:(Count:%23139df2))'
+                        '))',
+            'value': 302998},
+        {
+            'key': 1,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"DLP"%20AND%20NOT%20(event_subtype:%22E'
+                        'xabeam%20Audit%20Event%22)\')),queryString:\'exa_cat'
+                        'egory:"DLP"%20AND%20NOT%20(event_subtype:%22Exabeam%'
+                        '20Audit%20Event%22)\',searchExecuted:!t,sort:!(index'
+                        'Time,desc),uiState:(vis:(colors:(Count:%23139df2))))',
+            'value': 213888},
+        {
+            'key': 2,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"Application"%20AND%20NOT%20(event_subt'
+                        'ype:%22Exabeam%20Audit%20Event%22)\')),queryString:'
+                        '\'exa_category:"Application"%20AND%20NOT%20(event_su'
+                        'btype:%22Exabeam%20Audit%20Event%22)\',searchExecute'
+                        'd:!t,sort:!(indexTime,desc),uiState:(vis:(colors:(Co'
+                        'unt:%23139df2))))',
+            'value': 664
+        }
+    ]
+
+
 def relay_response_tiles():
     return {
         'data': [affected_ips_tile(),
-                 activity_types_tile()]
+                 activity_types_tile(),
+                 categories_tile()]
     }
 
 
@@ -710,5 +779,18 @@ def activity_types_tile():
         'short_description': 'Activity types found in Exabeam Data Lake',
         'tags': ['activity_types'],
         'title': 'Activity Types',
+        'type': 'donut_graph'
+    }
+
+
+def categories_tile():
+    return {
+        'description': 'Log categories chart shows distribution of logs by '
+                       'its categories.',
+        'id': 'categories',
+        'periods': ['last_30_days'],
+        'short_description': 'Log categories found in Exabeam Data Lake',
+        'tags': ['categories'],
+        'title': 'Categories',
         'type': 'donut_graph'
     }
