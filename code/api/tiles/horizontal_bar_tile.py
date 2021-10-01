@@ -45,7 +45,8 @@ class HorizontalBarTile(AbstractTile, ABC):
         data = []
         for bucket in visualize_data[self._id]['buckets']:
             timestamp = bucket.get('key')/10**3
-            date = datetime.fromtimestamp(timestamp, timezone.utc).strftime('%b/%d')
+            date = datetime.fromtimestamp(timestamp,
+                                          timezone.utc).strftime('%b/%d')
             values = []
             value = 0
             for inner_bucket in bucket[self._aggregation_field]['buckets']:
