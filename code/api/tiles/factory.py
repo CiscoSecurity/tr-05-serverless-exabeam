@@ -91,21 +91,11 @@ class AbstractTile(ABC):
 class TileFactory:
     @staticmethod
     def create_tile(tile_id):
-        for cls in TileFactory.get_leaf_subclasses(AbstractTile):
+        for cls in AbstractTile.__subclasses__():
             if cls()._id == tile_id:
                 return cls()
         raise TRFormattedError(400, INVALID_CHART_ID)
 
     @staticmethod
     def tiles_list():
-        return [cls().tile()
-                for cls in TileFactory.get_leaf_subclasses(AbstractTile)]
-
-    @staticmethod
-    def get_leaf_subclasses(cls):
-        if cls.__subclasses__():
-            subclasses_list = []
-            for subcls in cls.__subclasses__():
-                subclasses_list.extend(TileFactory.get_leaf_subclasses(subcls))
-            return subclasses_list
-        return [cls]
+        return [cls().tile() for cls in AbstractTile.__subclasses__()]

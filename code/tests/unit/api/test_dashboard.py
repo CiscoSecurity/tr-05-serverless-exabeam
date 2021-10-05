@@ -105,13 +105,12 @@ SuccessCall = namedtuple('SuccessCall', ('endpoint',
 
 
 def success_calls():
-    for tile_id in ['affected_ips', 'activity_types']:
-        yield SuccessCall(
-            '/tiles/tile-data',
-            {'tile_id': tile_id, 'period': 'last_30_days'},
-            exabeam_response_tile(tile_id),
-            relay_response_tile_data(tile_id)
-        )
+    yield SuccessCall(
+        '/tiles/tile-data',
+        {'tile_id': 'affected_ips', 'period': 'last_30_days'},
+        exabeam_response_tile(),
+        relay_response_tile_data()
+    )
     yield SuccessCall(
         '/tiles',
         {},

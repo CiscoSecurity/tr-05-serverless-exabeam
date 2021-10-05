@@ -501,16 +501,21 @@ def success_refer_body():
     }
 
 
-def exabeam_response_tile(tile_id):
-    tile_id_map = {
-        'affected_ips': exabeam_response_affected_ips(),
-        'activity_types': exabeam_response_activity_types()
-    }
-    return tile_id_map[tile_id]
-
-
-def exabeam_response_affected_ips():
+def exabeam_response_tile():
     return {
+        'took': 32,
+        'timed_out': False,
+        '_shards': {
+            'total': 47,
+            'successful': 47,
+            'skipped': 0,
+            'failed': 0
+        },
+        'hits': {
+            'total': 517752,
+            'max_score': 0.0,
+            'hits': []
+        },
         'aggregations': {
             'is_threat_src_ip': {
                 'doc_count_error_upper_bound': 0,
@@ -549,40 +554,7 @@ def exabeam_response_affected_ips():
     }
 
 
-def exabeam_response_activity_types():
-    return {
-        'aggregations': {
-            'exa_activity_type.keyword': {
-                'doc_count_error_upper_bound': 0,
-                'sum_other_doc_count': 0,
-                'buckets': [
-                    {
-                        'key': 'object-access',
-                        'doc_count': 303061
-                    },
-                    {
-                        'key': 'object-access/write',
-                        'doc_count': 156235
-                    },
-                    {
-                        'key': 'object-access/delete',
-                        'doc_count': 146194
-                    }
-                ]
-            }
-        }
-    }
-
-
-def relay_response_tile_data(tile_id):
-    tile_id_map = {
-        'affected_ips': relay_response_affected_ips(),
-        'activity_types': relay_response_activity_types()
-    }
-    return tile_id_map[tile_id]
-
-
-def relay_response_affected_ips():
+def relay_response_tile_data():
     return [
         {
             'icon': 'warning',
@@ -632,83 +604,26 @@ def relay_response_affected_ips():
     ]
 
 
-def relay_response_activity_types():
-    return [
-        {
-            'key': 0,
-            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
-                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
-                        ',query:(query_string:(default_field:message,query:\''
-                        'exa_activity_type:"object-access"%20AND%20NOT%20(eve'
-                        'nt_subtype:%22Exabeam%20Audit%20Event%22)\')),queryS'
-                        'tring:\'exa_activity_type:"object-access"%20AND%20NO'
-                        'T%20(event_subtype:%22Exabeam%20Audit%20Event%22)\','
-                        'searchExecuted:!t,sort:!(indexTime,desc),uiState:(vi'
-                        's:(colors:(Count:%23139df2))))',
-            'value': 303061
-        },
-        {
-            'key': 1,
-            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
-                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
-                        ',query:(query_string:(default_field:message,query:\''
-                        'exa_activity_type:"object-access/write"%20AND%20NOT%'
-                        '20(event_subtype:%22Exabeam%20Audit%20Event%22)\')),'
-                        'queryString:\'exa_activity_type:"object-access/write'
-                        '"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%20'
-                        'Event%22)\',searchExecuted:!t,sort:!(indexTime,desc)'
-                        ',uiState:(vis:(colors:(Count:%23139df2))))',
-            'value': 156235},
-        {
-            'key': 2,
-            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
-                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
-                        ',query:(query_string:(default_field:message,query:\''
-                        'exa_activity_type:"object-access/delete"%20AND%20NOT'
-                        '%20(event_subtype:%22Exabeam%20Audit%20Event%22)\'))'
-                        ',queryString:\'exa_activity_type:"object-access/dele'
-                        'te"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%'
-                        '20Event%22)\',searchExecuted:!t,sort:!(indexTime,des'
-                        'c),uiState:(vis:(colors:(Count:%23139df2))))',
-            'value': 146194
-        }
-    ]
-
-
 def relay_response_tiles():
     return {
-        'data': [affected_ips_tile(),
-                 activity_types_tile()]
+        'data': [tile()]
     }
 
 
 def relay_response_tiles_tile():
     return {
-        'data': affected_ips_tile()
+        'data': tile()
     }
 
 
-def affected_ips_tile():
+def tile():
     return {
-        'description': 'Affected IPs chart shows how many IPs are '
-                       'ransomware, threat or tor',
-        'id': 'affected_ips',
-        'periods': ['last_30_days'],
-        'short_description': 'Affected IPs found in Exabeam Data Lake',
-        'tags': ['affected_ips'],
-        'title': 'Affected IPs',
-        'type': 'metric_group'
-    }
-
-
-def activity_types_tile():
-    return {
-        'description': 'Activity types chart shows distribution of events '
-                       'that triggered log creation by its types.',
-        'id': 'activity_types',
-        'periods': ['last_30_days'],
-        'short_description': 'Activity types found in Exabeam Data Lake',
-        'tags': ['activity_types'],
-        'title': 'Activity Types',
-        'type': 'donut_graph'
-    }
+            'description': 'Affected IPs chart shows how many IPs are '
+                           'ransomware, threat or tor',
+            'id': 'affected_ips',
+            'periods': ['last_30_days'],
+            'short_description': 'Affected IPs found in Exabeam Data Lake',
+            'tags': ['affected_ips'],
+            'title': 'Affected IPs',
+            'type': 'metric_group'
+        }
