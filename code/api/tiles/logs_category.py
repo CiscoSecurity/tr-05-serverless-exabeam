@@ -2,9 +2,8 @@ from api.tiles.donut_tile import DonutTile
 
 
 class CategoriesTile(DonutTile):
-    @property
-    def _aggregation_field(self):
-        return 'exa_category.keyword'
+    def __init__(self):
+        self._aggregation_fields = ['exa_category.keyword']
 
     @property
     def _id(self):

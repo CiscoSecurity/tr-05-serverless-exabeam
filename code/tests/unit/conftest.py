@@ -505,8 +505,7 @@ def exabeam_response_tile(tile_id):
     tile_id_map = {
         'affected_ips': exabeam_response_affected_ips(),
         'activity_types': exabeam_response_activity_types(),
-        'categories': exabeam_response_categories(),
-        'activity_types_per_day': exabeam_response_activity_types_per_day()
+        'categories': exabeam_response_categories()
     }
     return tile_id_map[tile_id]
 
@@ -601,61 +600,11 @@ def exabeam_response_categories():
     }
 
 
-def exabeam_response_activity_types_per_day():
-    return {
-        'aggregations': {
-            'activity_types_per_day': {
-                'buckets': [
-                    {
-                        'key_as_string': '2021-09-21T00:00:00.000Z',
-                        'key': 1632182400000,
-                        'doc_count': 15078,
-                        'exa_activity_type.keyword': {
-                            'doc_count_error_upper_bound': 0,
-                            'sum_other_doc_count': 0,
-                            'buckets': [
-                                {
-                                    'key': 'dlp-alert',
-                                    'doc_count': 8083
-                                },
-                                {
-                                    'key': 'authentication',
-                                    'doc_count': 4
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        'key_as_string': '2021-09-22T00:00:00.000Z',
-                        'key': 1632268800000,
-                        'doc_count': 16190,
-                        'exa_activity_type.keyword': {
-                            'doc_count_error_upper_bound': 0,
-                            'sum_other_doc_count': 0,
-                            'buckets': [
-                                {
-                                    'key': 'dlp-alert',
-                                    'doc_count': 8717
-                                },
-                                {
-                                    'key': 'authentication',
-                                    'doc_count': 14
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        }
-    }
-
-
 def relay_response_tile_data(tile_id):
     tile_id_map = {
         'affected_ips': relay_response_affected_ips(),
         'activity_types': relay_response_activity_types(),
-        'categories': relay_response_categories(),
-        'activity_types_per_day': relay_response_activity_types_per_day()
+        'categories': relay_response_categories()
     }
     return tile_id_map[tile_id]
 
@@ -794,87 +743,11 @@ def relay_response_categories():
     ]
 
 
-def relay_response_activity_types_per_day():
-    return [
-        {
-            'key': 1632182400000,
-            'label': 'Sep/21',
-            'value': 8087,
-            'values': [
-                {
-                    'key': 'dlp-alert',
-                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
-                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
-                                ':Auto,val:auto),query:(query_string:(default'
-                                '_field:message,query:\'exa_activity_type:"dl'
-                                'p-alert"%20AND%20NOT%20(event_subtype:%22Exa'
-                                'beam%20Audit%20Event%22)\')),queryString:\'e'
-                                'xa_activity_type:"dlp-alert"%20AND%20NOT%20('
-                                'event_subtype:%22Exabeam%20Audit%20Event%22)'
-                                '\',searchExecuted:!t,sort:!(indexTime,desc),'
-                                'uiState:(vis:(colors:(Count:%23139df2))))',
-                    'value': 8083},
-                {
-                    'key': 'authentication',
-                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
-                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
-                                ':Auto,val:auto),query:(query_string:(default'
-                                '_field:message,query:\'exa_activity_type:"au'
-                                'thentication"%20AND%20NOT%20(event_subtype:%'
-                                '22Exabeam%20Audit%20Event%22)\')),queryStrin'
-                                'g:\'exa_activity_type:"authentication"%20AND'
-                                '%20NOT%20(event_subtype:%22Exabeam%20Audit%2'
-                                '0Event%22)\',searchExecuted:!t,sort:!(indexT'
-                                'ime,desc),uiState:(vis:(colors:(Count:%23139'
-                                'df2))))',
-                    'value': 4
-                }
-            ]
-        },
-        {
-            'key': 1632268800000,
-            'label': 'Sep/22',
-            'value': 8731,
-            'values': [
-                {
-                    'key': 'dlp-alert',
-                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
-                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
-                                ':Auto,val:auto),query:(query_string:(default'
-                                '_field:message,query:\'exa_activity_type:"dl'
-                                'p-alert"%20AND%20NOT%20(event_subtype:%22Exa'
-                                'beam%20Audit%20Event%22)\')),queryString:\'e'
-                                'xa_activity_type:"dlp-alert"%20AND%20NOT%20('
-                                'event_subtype:%22Exabeam%20Audit%20Event%22)'
-                                '\',searchExecuted:!t,sort:!(indexTime,desc),'
-                                'uiState:(vis:(colors:(Count:%23139df2))))',
-                    'value': 8717},
-                {
-                    'key': 'authentication',
-                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
-                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
-                                ':Auto,val:auto),query:(query_string:(default'
-                                '_field:message,query:\'exa_activity_type:"au'
-                                'thentication"%20AND%20NOT%20(event_subtype:%'
-                                '22Exabeam%20Audit%20Event%22)\')),queryStrin'
-                                'g:\'exa_activity_type:"authentication"%20AND'
-                                '%20NOT%20(event_subtype:%22Exabeam%20Audit%2'
-                                '0Event%22)\',searchExecuted:!t,sort:!(indexT'
-                                'ime,desc),uiState:(vis:(colors:(Count:%23139'
-                                'df2))))',
-                    'value': 14
-                }
-            ]
-        }
-    ]
-
-
 def relay_response_tiles():
     return {
         'data': [affected_ips_tile(),
                  activity_types_tile(),
-                 categories_tile(),
-                 activity_types_per_day_tile()]
+                 categories_tile()]
     }
 
 
@@ -920,19 +793,4 @@ def categories_tile():
         'tags': ['categories'],
         'title': 'Categories',
         'type': 'donut_graph'
-    }
-
-
-def activity_types_per_day_tile():
-    return {
-        'description': 'Activity types per day chart shows dynamic of '
-                       'activity types found in Exabeam Data Lake for the '
-                       'last 7 days',
-        'id': 'activity_types_per_day',
-        'periods': ['last_7_days'],
-        'short_description': 'Activity types found in Exabeam Data Lake per '
-                             'day',
-        'tags': ['activity_types_per_day'],
-        'title': 'Activity types per day',
-        'type': 'horizontal_bar_chart'
     }
