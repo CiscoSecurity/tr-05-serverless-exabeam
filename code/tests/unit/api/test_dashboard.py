@@ -105,8 +105,7 @@ SuccessCall = namedtuple('SuccessCall', ('endpoint',
 
 
 def success_calls():
-    tiles_id = ['affected_ips', 'activity_types', 'categories']
-    for tile_id in tiles_id:
+    for tile_id in ['affected_ips', 'activity_types']:
         yield SuccessCall(
             '/tiles/tile-data',
             {'tile_id': tile_id, 'period': 'last_30_days'},

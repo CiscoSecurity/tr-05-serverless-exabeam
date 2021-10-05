@@ -6,10 +6,6 @@ from api.utils import source_uri
 
 class DonutTile(AbstractTile):
     @property
-    def _type(self):
-        return 'donut_graph'
-
-    @property
     def _periods(self):
         return ['last_30_days']
 
