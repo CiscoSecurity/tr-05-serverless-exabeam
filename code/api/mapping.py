@@ -2,8 +2,6 @@ from uuid import uuid5, NAMESPACE_X500
 
 from flask import current_app
 
-from api.utils import source_uri
-
 SIGHTING = 'sighting'
 
 SOURCE = 'Exabeam'
@@ -20,6 +18,12 @@ SIGHTING_DEFAULTS = {
     'internal': True,
     'count': 1
 }
+
+
+def source_uri(value, params):
+    url = f'https://{current_app.config["HOST"]}'
+    path = '/data/app/dataui#/discover'
+    return f'{url}{path}?{params.format(value=value)}'
 
 
 class Sighting:

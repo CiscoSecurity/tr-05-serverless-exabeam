@@ -44,20 +44,13 @@
         {
             "id": "refer",
             "description": "Reference links"
-        },
-        {
-            "id": "tiles",
-            "description": "Dashboard tiles"
         }
     ],
     "properties": {
         "supported-apis": [
             "health",
             "observe/observables",
-            "refer/observables",
-            "tiles",
-            "tiles/tile",
-            "tiles/tile-data"
+            "refer/observables"
         ],
         "url": "https://ciscohosted.url",
         "auth-type": "configuration-token",
