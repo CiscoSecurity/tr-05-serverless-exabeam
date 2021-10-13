@@ -499,3 +499,606 @@ def success_refer_body():
                 }
             ]
     }
+
+
+def exabeam_response_tile(tile_id):
+    tile_id_map = {
+        'affected_ips': exabeam_response_affected_ips(),
+        'activity_types': exabeam_response_activity_types(),
+        'categories': exabeam_response_categories(),
+        'activity_types_per_day': exabeam_response_activity_types_per_day(),
+        'categories_per_day': exabeam_response_categories_per_day()
+    }
+    return tile_id_map[tile_id]
+
+
+def exabeam_response_affected_ips():
+    return {
+        'aggregations': {
+            'is_threat_src_ip': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 0,
+                        'key_as_string': 'false',
+                        'doc_count': 495736
+                    }
+                ]
+            },
+            'is_ransomware_src_ip': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 0,
+                        'key_as_string': 'false',
+                        'doc_count': 495736
+                    }
+                ]
+            },
+            'is_tor_src_ip': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 0,
+                        'key_as_string': 'false',
+                        'doc_count': 495736
+                    }
+                ]
+            }
+        }
+    }
+
+
+def exabeam_response_activity_types():
+    return {
+        'aggregations': {
+            'exa_activity_type.keyword': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 'object-access',
+                        'doc_count': 303061
+                    },
+                    {
+                        'key': 'object-access/write',
+                        'doc_count': 156235
+                    },
+                    {
+                        'key': 'object-access/delete',
+                        'doc_count': 146194
+                    }
+                ]
+            }
+        }
+    }
+
+
+def exabeam_response_categories():
+    return {
+        'aggregations': {
+            'exa_category.keyword': {
+                'doc_count_error_upper_bound': 0,
+                'sum_other_doc_count': 0,
+                'buckets': [
+                    {
+                        'key': 'File',
+                        'doc_count': 302998
+                    },
+                    {
+                        'key': 'DLP',
+                        'doc_count': 213888
+                    },
+                    {
+                        'key': 'Application',
+                        'doc_count': 664
+                    }
+                ]
+            }
+        }
+    }
+
+
+def exabeam_response_activity_types_per_day():
+    return {
+        'aggregations': {
+            'activity_types_per_day': {
+                'buckets': [
+                    {
+                        'key_as_string': '2021-09-21T00:00:00.000Z',
+                        'key': 1632182400000,
+                        'doc_count': 15078,
+                        'exa_activity_type.keyword': {
+                            'doc_count_error_upper_bound': 0,
+                            'sum_other_doc_count': 0,
+                            'buckets': [
+                                {
+                                    'key': 'dlp-alert',
+                                    'doc_count': 8083
+                                },
+                                {
+                                    'key': 'authentication',
+                                    'doc_count': 4
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        'key_as_string': '2021-09-22T00:00:00.000Z',
+                        'key': 1632268800000,
+                        'doc_count': 16190,
+                        'exa_activity_type.keyword': {
+                            'doc_count_error_upper_bound': 0,
+                            'sum_other_doc_count': 0,
+                            'buckets': [
+                                {
+                                    'key': 'dlp-alert',
+                                    'doc_count': 8717
+                                },
+                                {
+                                    'key': 'authentication',
+                                    'doc_count': 14
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+def exabeam_response_categories_per_day():
+    return {
+        'aggregations': {
+            'categories_per_day': {
+                'buckets': [
+                    {
+                        'key_as_string': '2021-09-21T00:00:00.000Z',
+                        'key': 1632182400000,
+                        'doc_count': 15078,
+                        'exa_category.keyword': {
+                            'doc_count_error_upper_bound': 0,
+                            'sum_other_doc_count': 0,
+                            'buckets': [
+                                {
+                                    'key': 'DLP',
+                                    'doc_count': 15073
+                                },
+                                {
+                                    'key': 'Application',
+                                    'doc_count': 4
+                                },
+                                {
+                                    'key': 'Print Activity',
+                                    'doc_count': 1
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        'key_as_string': '2021-09-22T00:00:00.000Z',
+                        'key': 1632268800000,
+                        'doc_count': 16190,
+                        'exa_category.keyword': {
+                            'doc_count_error_upper_bound': 0,
+                            'sum_other_doc_count': 0,
+                            'buckets': [
+                                {
+                                    'key': 'DLP',
+                                    'doc_count': 16176
+                                },
+                                {
+                                    'key': 'Application',
+                                    'doc_count': 14
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+def relay_response_tile_data(tile_id):
+    tile_id_map = {
+        'affected_ips': relay_response_affected_ips(),
+        'activity_types': relay_response_activity_types(),
+        'categories': relay_response_categories(),
+        'activity_types_per_day': relay_response_activity_types_per_day(),
+        'categories_per_day': relay_response_categories_per_day()
+    }
+    return tile_id_map[tile_id]
+
+
+def relay_response_affected_ips():
+    return [
+        {
+            'icon': 'warning',
+            'label': 'Ransomware IPs',
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'is_ransomware_src_ip:"true"%20AND%20NOT%20(event_sub'
+                        'type:%22Exabeam%20Audit%20Event%22)\')),queryString:'
+                        '\'is_ransomware_src_ip:"true"%20AND%20NOT%20(event_s'
+                        'ubtype:%22Exabeam%20Audit%20Event%22)\',searchExecut'
+                        'ed:!t,sort:!(indexTime,desc),uiState:(vis:(colors:(C'
+                        'ount:%23139df2))))',
+            'value': 0,
+            'value_unit': 'integer'
+        },
+        {
+            'icon': 'warning',
+            'label': 'Threat IPs',
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'is_threat_src_ip:"true"%20AND%20NOT%20(event_subtype'
+                        ':%22Exabeam%20Audit%20Event%22)\')),queryString:\'is'
+                        '_threat_src_ip:"true"%20AND%20NOT%20(event_subtype:%'
+                        '22Exabeam%20Audit%20Event%22)\',searchExecuted:!t,so'
+                        'rt:!(indexTime,desc),uiState:(vis:(colors:(Count:%23'
+                        '139df2))))',
+            'value': 0,
+            'value_unit': 'integer'
+        },
+        {
+            'icon': 'warning',
+            'label': 'Tor IPs',
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'is_tor_src_ip:"true"%20AND%20NOT%20(event_subtype:%2'
+                        '2Exabeam%20Audit%20Event%22)\')),queryString:\'is_to'
+                        'r_src_ip:"true"%20AND%20NOT%20(event_subtype:%22Exab'
+                        'eam%20Audit%20Event%22)\',searchExecuted:!t,sort:!(i'
+                        'ndexTime,desc),uiState:(vis:(colors:(Count:%23139df2'
+                        '))))',
+            'value': 0,
+            'value_unit': 'integer'
+        }
+    ]
+
+
+def relay_response_activity_types():
+    return [
+        {
+            'key': 0,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_activity_type:"object-access"%20AND%20NOT%20(eve'
+                        'nt_subtype:%22Exabeam%20Audit%20Event%22)\')),queryS'
+                        'tring:\'exa_activity_type:"object-access"%20AND%20NO'
+                        'T%20(event_subtype:%22Exabeam%20Audit%20Event%22)\','
+                        'searchExecuted:!t,sort:!(indexTime,desc),uiState:(vi'
+                        's:(colors:(Count:%23139df2))))',
+            'value': 303061
+        },
+        {
+            'key': 1,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_activity_type:"object-access/write"%20AND%20NOT%'
+                        '20(event_subtype:%22Exabeam%20Audit%20Event%22)\')),'
+                        'queryString:\'exa_activity_type:"object-access/write'
+                        '"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%20'
+                        'Event%22)\',searchExecuted:!t,sort:!(indexTime,desc)'
+                        ',uiState:(vis:(colors:(Count:%23139df2))))',
+            'value': 156235},
+        {
+            'key': 2,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_activity_type:"object-access/delete"%20AND%20NOT'
+                        '%20(event_subtype:%22Exabeam%20Audit%20Event%22)\'))'
+                        ',queryString:\'exa_activity_type:"object-access/dele'
+                        'te"%20AND%20NOT%20(event_subtype:%22Exabeam%20Audit%'
+                        '20Event%22)\',searchExecuted:!t,sort:!(indexTime,des'
+                        'c),uiState:(vis:(colors:(Count:%23139df2))))',
+            'value': 146194
+        }
+    ]
+
+
+def relay_response_categories():
+    return [
+        {
+            'key': 0,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"File"%20AND%20NOT%20(event_subtype:%22'
+                        'Exabeam%20Audit%20Event%22)\')),queryString:\'exa_ca'
+                        'tegory:"File"%20AND%20NOT%20(event_subtype:%22Exabea'
+                        'm%20Audit%20Event%22)\',searchExecuted:!t,sort:!(ind'
+                        'exTime,desc),uiState:(vis:(colors:(Count:%23139df2))'
+                        '))',
+            'value': 302998},
+        {
+            'key': 1,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"DLP"%20AND%20NOT%20(event_subtype:%22E'
+                        'xabeam%20Audit%20Event%22)\')),queryString:\'exa_cat'
+                        'egory:"DLP"%20AND%20NOT%20(event_subtype:%22Exabeam%'
+                        '20Audit%20Event%22)\',searchExecuted:!t,sort:!(index'
+                        'Time,desc),uiState:(vis:(colors:(Count:%23139df2))))',
+            'value': 213888},
+        {
+            'key': 2,
+            'link_uri': 'https://exabeam.com/data/app/dataui#/discover?_g=(ti'
+                        'me:(from:now-30d))&_a=(interval:(text:Auto,val:auto)'
+                        ',query:(query_string:(default_field:message,query:\''
+                        'exa_category:"Application"%20AND%20NOT%20(event_subt'
+                        'ype:%22Exabeam%20Audit%20Event%22)\')),queryString:'
+                        '\'exa_category:"Application"%20AND%20NOT%20(event_su'
+                        'btype:%22Exabeam%20Audit%20Event%22)\',searchExecute'
+                        'd:!t,sort:!(indexTime,desc),uiState:(vis:(colors:(Co'
+                        'unt:%23139df2))))',
+            'value': 664
+        }
+    ]
+
+
+def relay_response_activity_types_per_day():
+    return [
+        {
+            'key': 1632182400000,
+            'label': 'Sep/21',
+            'value': 8087,
+            'values': [
+                {
+                    'key': 'dlp-alert',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_activity_type:"dl'
+                                'p-alert"%20AND%20NOT%20(event_subtype:%22Exa'
+                                'beam%20Audit%20Event%22)\')),queryString:\'e'
+                                'xa_activity_type:"dlp-alert"%20AND%20NOT%20('
+                                'event_subtype:%22Exabeam%20Audit%20Event%22)'
+                                '\',searchExecuted:!t,sort:!(indexTime,desc),'
+                                'uiState:(vis:(colors:(Count:%23139df2))))',
+                    'value': 8083},
+                {
+                    'key': 'authentication',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_activity_type:"au'
+                                'thentication"%20AND%20NOT%20(event_subtype:%'
+                                '22Exabeam%20Audit%20Event%22)\')),queryStrin'
+                                'g:\'exa_activity_type:"authentication"%20AND'
+                                '%20NOT%20(event_subtype:%22Exabeam%20Audit%2'
+                                '0Event%22)\',searchExecuted:!t,sort:!(indexT'
+                                'ime,desc),uiState:(vis:(colors:(Count:%23139'
+                                'df2))))',
+                    'value': 4
+                }
+            ]
+        },
+        {
+            'key': 1632268800000,
+            'label': 'Sep/22',
+            'value': 8731,
+            'values': [
+                {
+                    'key': 'dlp-alert',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_activity_type:"dl'
+                                'p-alert"%20AND%20NOT%20(event_subtype:%22Exa'
+                                'beam%20Audit%20Event%22)\')),queryString:\'e'
+                                'xa_activity_type:"dlp-alert"%20AND%20NOT%20('
+                                'event_subtype:%22Exabeam%20Audit%20Event%22)'
+                                '\',searchExecuted:!t,sort:!(indexTime,desc),'
+                                'uiState:(vis:(colors:(Count:%23139df2))))',
+                    'value': 8717},
+                {
+                    'key': 'authentication',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_activity_type:"au'
+                                'thentication"%20AND%20NOT%20(event_subtype:%'
+                                '22Exabeam%20Audit%20Event%22)\')),queryStrin'
+                                'g:\'exa_activity_type:"authentication"%20AND'
+                                '%20NOT%20(event_subtype:%22Exabeam%20Audit%2'
+                                '0Event%22)\',searchExecuted:!t,sort:!(indexT'
+                                'ime,desc),uiState:(vis:(colors:(Count:%23139'
+                                'df2))))',
+                    'value': 14
+                }
+            ]
+        }
+    ]
+
+
+def relay_response_categories_per_day():
+    return [
+        {
+            'key': 1632182400000,
+            'label': 'Sep/21',
+            'value': 15078,
+            'values': [
+                {
+                    'key': 'DLP',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_category:"DLP"%20'
+                                'AND%20NOT%20(event_subtype:%22Exabeam%20Audi'
+                                't%20Event%22)\')),queryString:\'exa_category'
+                                ':"DLP"%20AND%20NOT%20(event_subtype:%22Exabe'
+                                'am%20Audit%20Event%22)\',searchExecuted:!t,s'
+                                'ort:!(indexTime,desc),uiState:(vis:(colors:('
+                                'Count:%23139df2))))',
+                    'value': 15073
+                },
+                {
+                    'key': 'Application',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_category:"Applica'
+                                'tion"%20AND%20NOT%20(event_subtype:%22Exabea'
+                                'm%20Audit%20Event%22)\')),queryString:\'exa_'
+                                'category:"Application"%20AND%20NOT%20(event_'
+                                'subtype:%22Exabeam%20Audit%20Event%22)\',sea'
+                                'rchExecuted:!t,sort:!(indexTime,desc),uiStat'
+                                'e:(vis:(colors:(Count:%23139df2))))',
+                    'value': 4
+                },
+                {
+                    'key': 'Print Activity',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_category:"Print A'
+                                'ctivity"%20AND%20NOT%20(event_subtype:%22Exa'
+                                'beam%20Audit%20Event%22)\')),queryString:\'e'
+                                'xa_category:"Print Activity"%20AND%20NOT%20('
+                                'event_subtype:%22Exabeam%20Audit%20Event%22)'
+                                '\',searchExecuted:!t,sort:!(indexTime,desc),'
+                                'uiState:(vis:(colors:(Count:%23139df2))))',
+                    'value': 1
+                }
+            ]
+        },
+        {
+            'key': 1632268800000,
+            'label': 'Sep/22',
+            'value': 16190,
+            'values': [
+                {
+                    'key': 'DLP',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_category:"DLP"%20'
+                                'AND%20NOT%20(event_subtype:%22Exabeam%20Audi'
+                                't%20Event%22)\')),queryString:\'exa_category'
+                                ':"DLP"%20AND%20NOT%20(event_subtype:%22Exabe'
+                                'am%20Audit%20Event%22)\',searchExecuted:!t,s'
+                                'ort:!(indexTime,desc),uiState:(vis:(colors:('
+                                'Count:%23139df2))))',
+                    'value': 16176
+                },
+                {
+                    'key': 'Application',
+                    'link_uri': 'https://exabeam.com/data/app/dataui#/discove'
+                                'r?_g=(time:(from:now-1d))&_a=(interval:(text'
+                                ':Auto,val:auto),query:(query_string:(default'
+                                '_field:message,query:\'exa_category:"Applica'
+                                'tion"%20AND%20NOT%20(event_subtype:%22Exabea'
+                                'm%20Audit%20Event%22)\')),queryString:\'exa_'
+                                'category:"Application"%20AND%20NOT%20(event_'
+                                'subtype:%22Exabeam%20Audit%20Event%22)\',sea'
+                                'rchExecuted:!t,sort:!(indexTime,desc),uiStat'
+                                'e:(vis:(colors:(Count:%23139df2))))',
+                    'value': 14
+                }
+            ]
+        }
+    ]
+
+
+def relay_response_tiles():
+    return {
+        'data': [affected_ips_tile(),
+                 activity_types_tile(),
+                 categories_tile(),
+                 activity_types_per_day_tile(),
+                 categories_per_day_tile()]
+    }
+
+
+def relay_response_tiles_tile(tile_id):
+    tile_id_map = {
+        'affected_ips': affected_ips_tile(),
+        'activity_types': activity_types_tile(),
+        'categories': categories_tile(),
+        'activity_types_per_day': activity_types_per_day_tile(),
+        'categories_per_day': categories_per_day_tile()
+    }
+    return {
+        'data': tile_id_map[tile_id]
+    }
+
+
+def affected_ips_tile():
+    return {
+        'description': 'Affected IPs chart shows how many IPs are '
+                       'ransomware, threat or tor',
+        'id': 'affected_ips',
+        'periods': ['last_30_days'],
+        'short_description': 'Affected IPs found in Exabeam Data Lake',
+        'tags': ['affected_ips'],
+        'title': 'Affected IPs',
+        'type': 'metric_group'
+    }
+
+
+def activity_types_tile():
+    return {
+        'description': 'Activity types chart shows distribution of events '
+                       'that triggered log creation by its types.',
+        'id': 'activity_types',
+        'periods': ['last_30_days'],
+        'short_description': 'Activity types found in Exabeam Data Lake',
+        'tags': ['activity_types'],
+        'title': 'Activity Types',
+        'type': 'donut_graph'
+    }
+
+
+def categories_tile():
+    return {
+        'description': 'Log categories chart shows distribution of logs by '
+                       'its categories.',
+        'id': 'categories',
+        'periods': ['last_30_days'],
+        'short_description': 'Log categories found in Exabeam Data Lake',
+        'tags': ['categories'],
+        'title': 'Categories',
+        'type': 'donut_graph'
+    }
+
+
+def activity_types_per_day_tile():
+    return {
+        'description': 'Activity types per day chart shows dynamic of '
+                       'activity types found in Exabeam Data Lake for the '
+                       'last 7 days',
+        'id': 'activity_types_per_day',
+        'periods': ['last_7_days'],
+        'short_description': 'Activity types found in Exabeam Data Lake per '
+                             'day',
+        'tags': ['activity_types_per_day'],
+        'title': 'Activity types per day',
+        'type': 'horizontal_bar_chart'
+    }
+
+
+def categories_per_day_tile():
+    return {
+        'description': 'Categories per day chart shows dynamic of log '
+                       'categories found in Exabeam Data Lake for the last '
+                       '7 days',
+        'id': 'categories_per_day',
+        'periods': ['last_7_days'],
+        'short_description': 'Categories found in Exabeam Data Lake per day',
+        'tags': ['categories_per_day'],
+        'title': 'Categories per day',
+        'type': 'horizontal_bar_chart'
+    }
