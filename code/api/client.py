@@ -64,29 +64,51 @@ class ExabeamClient:
     @staticmethod
     def _get_payload(indices, observable):
         return {
-            'clusterWithIndices': [
-                {
-                    'clusterName': 'local',
-                    'indices': indices
-                }
-            ],
-            'query': f'"{observable}" AND NOT (event_subtype:'
-                     '"Exabeam Audit Event")',
+            **ExabeamClient._get_indices_payload(indices),
             'size': 101,
             'sortBy': [
                 {
                     'field': 'indexTime',
                     'order': 'desc'
                 }
+            ],
+            'query': f'"{observable}" AND NOT (event_subtype:'
+                     '"Exabeam Audit Event")'
+        }
+
+    @staticmethod
+    def _get_visualize_payload(indices, aggregation_query):
+        return {
+            'aggs': aggregation_query,
+            'query': {
+                **ExabeamClient._get_indices_payload(indices),
+                'query': '* AND NOT (event_subtype:"Exabeam Audit Event")'
+            },
+            'size': 0
+        }
+
+    @staticmethod
+    def _get_indices_payload(indices):
+        return {
+            'clusterWithIndices': [
+                {
+                    'clusterName': 'local',
+                    'indices': indices
+                }
             ]
         }
 
-    def get_data(self, observable):
+    @staticmethod
+    def _get_indices(days_amount):
         today = datetime.today()
         indices = []
-        for days in range(1, 31):
+        for days in range(1, days_amount + 1):
             delta = timedelta(days=days)
             indices.append(f'exabeam-{(today - delta).strftime("%Y.%m.%d")}')
+        return indices
+
+    def get_data(self, observable):
+        indices = self._get_indices(30)
         response = self._request(path='dl/api/es/search',
                                  method='POST',
                                  body=self._get_payload(indices, observable))
@@ -94,3 +116,12 @@ class ExabeamClient:
         if len(hits) > self._entities_limit_default:
             add_error(MoreMessagesAvailableWarning(observable))
         return hits[:self._entities_limit]
+
+    def get_visualize_data(self, aggregation_query, days_amount):
+        indices = self._get_indices(days_amount)
+        payload = self._get_visualize_payload(indices, aggregation_query)
+        response = self._request(path='dl/api/es/visualize',
+                                 method='POST',
+                                 body=payload)
+        aggregations = response['aggregations']
+        return aggregations
