@@ -32,7 +32,7 @@ def handle_error(exception):
         exception.__class__.__name__,
     ])
 
-    response = jsonify(code=code, message=message, reason=reason)
+    response = jsonify(code=str(code), message=message, reason=reason)
     return response, code
 
 
