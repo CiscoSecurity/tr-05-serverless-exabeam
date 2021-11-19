@@ -261,7 +261,7 @@ def test_call_with_unknown_status_code(
     mock_get.return_value = mock_api_response(
         payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT
     )
-    mock_request.return_value = mock_api_response(status_code=522)
+    mock_request.return_value = mock_api_response(status_code='522')
 
     response = client.post('/health',
                            headers=get_headers(valid_jwt()))
