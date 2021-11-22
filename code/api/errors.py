@@ -69,7 +69,7 @@ class CriticalExabeamResponseError(TRFormattedError):
         try:
             code = HTTPStatus(response.status_code).phrase
         except ValueError:
-            code = response.status_code
+            code = str(response.status_code)
         super().__init__(
             code,
             f'Unexpected response from Exabeam: {response.text}'

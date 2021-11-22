@@ -155,7 +155,7 @@ def unknown_response_code_relay_response():
     return {
         'errors': [
             {
-                'code': 522,
+                'code': '522',
                 'message': 'Unexpected response from Exabeam: None',
                 'type': 'fatal'
             }
