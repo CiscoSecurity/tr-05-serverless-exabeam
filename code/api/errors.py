@@ -5,7 +5,6 @@ AUTH_ERROR = 'authorization error'
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
 CONNECTION_ERROR = 'connection error'
-INVALID_CREDENTIALS = 'wrong key'
 INVALID_HOST = 'Invalid host'
 EXABEAM_DOWN = 'Exabeam is down'
 
