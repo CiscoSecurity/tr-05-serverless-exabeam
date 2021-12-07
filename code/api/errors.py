@@ -5,6 +5,7 @@ AUTH_ERROR = 'authorization error'
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
 CONNECTION_ERROR = 'connection error'
+INVALID_CREDENTIALS = 'wrong key'
 
 
 class TRFormattedError(Exception):
@@ -66,13 +67,19 @@ class ExabeamConnectionError(TRFormattedError):
 
 class CriticalExabeamResponseError(TRFormattedError):
     def __init__(self, response):
+        status_code_map = {
+            HTTPStatus.UNAUTHORIZED: INVALID_CREDENTIALS,
+        }
+        # This try except section is needed because
+        # Exabeam can return not standard 522 status code
         try:
             code = HTTPStatus(response.status_code).phrase
         except ValueError:
             code = str(response.status_code)
         super().__init__(
             code,
-            f'Unexpected response from Exabeam: {response.text}'
+            'Unexpected response from Exabeam: '
+            f'{status_code_map.get(response.status_code, response.text)}'
         )
 
 
