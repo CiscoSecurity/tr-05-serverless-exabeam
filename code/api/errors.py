@@ -72,13 +72,14 @@ class CriticalExabeamResponseError(TRFormattedError):
             530: INVALID_HOST,
             522: EXABEAM_DOWN
         }
+        connection_error_statuses = (530, 522,)
         # This try except section is needed because
         # Exabeam can return not standard 522, 530 status codes
         try:
             code = HTTPStatus(response.status_code).phrase
         except ValueError:
             code = (CONNECTION_ERROR
-                    if response.status_code in status_phrase_map.keys()
+                    if response.status_code in connection_error_statuses
                     else str(response.status_code))
 
         super().__init__(
